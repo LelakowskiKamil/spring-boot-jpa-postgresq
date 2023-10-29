@@ -59,7 +59,7 @@
         <Root level="INFO">
             <AppenderRef ref="FailoverKafka"/>
         </Root>
-        <logger name="pl.lelakowski" level="debug"/>
+        <logger name="com.bezkoder" level="debug"/>
         <logger name="org.apache.kafka"
                 level="ERROR"/> <!-- level wymagany - https://logging.apache.org/log4j/2.x/manual/appenders.html#KafkaAppender -->
     </Loggers>
