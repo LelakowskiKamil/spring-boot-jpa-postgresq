@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+    <appender name="logstash" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <destination>localhost:5000</destination>
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <providers>
+                <mdc/>
+                <context/>
+                <logLevel/>
+                <loggerName/>
+                <threadName/>
+                <message/>
+                <logstashMarkers/>
+                <stackTrace/>
+            </providers>
+        </encoder>
+    </appender>
+
+    <appender name="amqp"
+              class="org.springframework.amqp.rabbit.logback.AmqpAppender">
+        <host>localhost</host>
+        <port>5672</port>
+        <virtualHost>/</virtualHost>
+        <username>guest</username>
+        <password>guest</password>
+        <exchangeType>topic</exchangeType>
+        <exchangeName>logback</exchangeName>
+        <applicationId>logback</applicationId>
+        <routingKeyPattern>SomeIntegrationEvent</routingKeyPattern>
+        <contentType>text/plain</contentType>
+        <maxSenderRetries>2</maxSenderRetries>
+        <charset>UTF-8</charset>
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <providers>
+                <timestamp>
+                    <fieldName>timestamp</fieldName>
+                    <pattern>yyyy-MM-dd' 'HH:mm:ss.SSS</pattern>
+                </timestamp>
+                <pattern>your desired pattern</pattern>
+            </providers>
+        </encoder>
+    </appender>
+    <root level="info">
+        <!--        <appender-ref ref="logstash" />-->
+        <appender-ref ref="amqp"/>
+    </root>
+</configuration>

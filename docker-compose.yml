@@ -1,0 +1,142 @@
+version: '3'
+services:
+  spring-boot-jpa-postgres:
+    container_name: "spring-boot-jpa-postgres"
+    image: docker.io/lelakowsky/spring-boot-jpa-postgresql:latest
+    restart: no
+    ports:
+      - 9050:9050
+    volumes:
+      - ./kafka/kafkacert/client-truststore.jks:/certs/kafka.client.truststore.jks:ro
+      - ./kafka/kafkacert/client-keystore.jks:/certs/kafka.client.keystore.jks:ro
+    depends_on:
+      - kafka
+  postgres:
+    container_name: "postgres"
+    image: postgres:15
+    env_file:
+      - postgres/db.env
+    restart: no
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres:/var/lib/postgresql/data
+  rabbitmq:
+    container_name: 'rabbitmq'
+    image: rabbitmq:3.9-management
+    restart: no
+    ports:
+      - 5672:5672
+      - 15672:15672
+    env_file:
+      - rabbitmq/rabbitmq.env
+    volumes:
+      - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+      - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+  #      - ./rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro
+  #      - ./rabbitmq/ca-cert.pem:/etc/ssl/rmq-cacert.pem:ro
+  #      - ./rabbitmq/server-cert.pem:/etc/ssl/rmq-cert.pem:ro
+  #      - ./rabbitmq/server-key.pem:/etc/ssl/rmq-key.pem:ro
+  zookeeper:
+    container_name: 'zookeeper'
+    image: wurstmeister/zookeeper:latest
+
+  kafka:
+    container_name: 'kafka'
+    image: wurstmeister/kafka:latest
+    hostname: kafka
+    restart: no
+    ports:
+      - 9093:9093
+      - 9092:9092
+    volumes:
+      - ./kafka/kafkacert/server-keystore.jks:/certs/kafka.server.keystore.jks:ro
+      - ./kafka/kafkacert/server-truststore.jks:/certs/kafka.server.truststore.jks:ro
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENERS: PLAINTEXT://:9092,SSL://:9093 #internal listener for docker, 9092 for http, 9093 for SSL
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,SSL://kafka:9093 #external liustener for other services, host:9092 for http, host:9093 for SSL
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+      KAFKA_SSL_KEYSTORE_LOCATION: '/certs/kafka.server.keystore.jks'
+      KAFKA_SSL_KEYSTORE_PASSWORD: 'Test123'
+      KAFKA_SSL_KEY_PASSWORD: 'Test123'
+      KAFKA_SSL_TRUSTSTORE_LOCATION: '/certs/kafka.server.truststore.jks'
+      KAFKA_SSL_TRUSTSTORE_PASSWORD: 'Test123'
+      KAFKA_SSL_ENDPOINT_IDENTIFICATION_ALGORITHM: '' #Important
+      KAFKA_SECURITY_INTER_BROKER_PROTOCOL: 'SSL'
+      KAFKA_SSL_PROTOCOL: TLSv1.2 #Important
+  kafka-ui:
+    container_name: kafka-ui
+    image: provectuslabs/kafka-ui:latest
+    restart: no
+    ports:
+      - 8080:8080
+    depends_on:
+      - kafka
+    environment:
+      - DYNAMIC_CONFIG_ENABLED= true
+      - KAFKA_CLUSTERS_0_NAME= local
+      - KAFKA_CLUSTERS_0_PROPERTIES_SECURITY_PROTOCOL= SSL
+      - KAFKA_CLUSTERS_0_PROPERTIES_SSL_KEYSTORE_LOCATION= /certs/kafka.server.keystore.jks
+      - KAFKA_CLUSTERS_0_PROPERTIES_SSL_KEYSTORE_PASSWORD= Test123
+      - KAFKA_CLUSTERS_0_PROPERTIES_SSL_TRUSTSTORE_LOCATION= /certs/kafka.server.truststore.jks
+      - KAFKA_CLUSTERS_0_PROPERTIES_SSL_TRUSTSTORE_PASSWORD= Test123
+      - KAFKA_CLUSTERS_0_PROPERTIES_SSL_KEY_PASSWORD= Test123
+      - KAFKA_CLUSTERS_0_PROPERTIES_SSL_PROTOCOL= TLSv1.2
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS= kafka:9093
+    volumes:
+      - ./kafka/kafkacert/server-keystore.jks:/certs/kafka.server.keystore.jks:ro
+      - ./kafka/kafkacert/server-truststore.jks:/certs/kafka.server.truststore.jks:ro
+  #  redis:
+  #    image: redis:7.2.2-alpine
+  #    restart: no
+  #    ports:
+  #      - 6379:6379
+  #    volumes:
+  #      - redis:/data
+  #    networks:
+  #      - kafkanet
+  elasticsearch:
+    image: elasticsearch:7.14.2
+    container_name: 'elasticsearch'
+    restart: no
+    hostname: elasticsearch
+    ports:
+      - 9200:9200
+      - 9300:9300
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+  kibana:
+    image: kibana:7.14.2
+    container_name: 'kibana'
+    restart: no
+    ports:
+      - 5601:5601
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+
+  logstash:
+    image: logstash:7.14.2
+    container_name: 'logstash'
+    restart: no
+    ports:
+      - 5000:5000
+      - 5044:5044
+      - 9600:9600
+    volumes:
+      - ./logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+      - ./kafka/kafkacert/client-keystore.jks:/usr/share/logstash/client-keystore.jks
+      - ./kafka/kafkacert/client-truststore.jks:/usr/share/logstash/client-truststore.jks
+    environment:
+      - XPACK_MONITORING_ELASTICSEARCH_HOSTS=http://elasticsearch:9200 #Important
+      - XPACK_MONITORING_ENABLED=true #Important
+volumes:
+  rabbitmq:
+    driver: local
+  postgres:
+    driver: local
+#  redis:
+#    driver: local

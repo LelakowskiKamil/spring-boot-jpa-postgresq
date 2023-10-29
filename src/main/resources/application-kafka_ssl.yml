@@ -1,0 +1,43 @@
+spring:
+  kafka:
+    properties:
+      security.protocol: "SSL"
+    bootstrap-servers: kafka:9093
+    ssl:
+      trust-store-location: file:C:\Users\kamil\IdeaProjects\spring-boot-jpa-postgresql\kafka\kafkacert\client-truststore.jks
+      trust-store-password: "Test123"
+      protocol: TLSv1.2
+      key-store-password: "Test123"
+      key-store-location: file:C:\Users\kamil\IdeaProjects\spring-boot-jpa-postgresql\kafka\kafkacert\client-keystore.jks
+      key-password: "Test123"
+      key-store-type: jks
+      trust-store-type: jks
+    consumer:
+      bootstrap-servers: kafka:9093
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      ssl:
+        trust-store-location: file:C:\Users\kamil\IdeaProjects\spring-boot-jpa-postgresql\kafka\kafkacert\client-truststore.jks
+        trust-store-password: "Test123"
+        protocol: TLSv1.2
+        key-store-password: "Test123"
+        key-store-location: file:C:\Users\kamil\IdeaProjects\spring-boot-jpa-postgresql\kafka\kafkacert\client-keystore.jks
+        key-password: "Test123"
+        key-store-type: jks
+        trust-store-type: jks
+    producer:
+      ssl:
+        trust-store-location: file:C:\Users\kamil\IdeaProjects\spring-boot-jpa-postgresql\kafka\kafkacert\client-truststore.jks
+        trust-store-password: "Test123"
+        protocol: TLSv1.2
+        key-store-location: file:C:\Users\kamil\IdeaProjects\spring-boot-jpa-postgresql\kafka\kafkacert\client-keystore.jks
+        key-store-password: "Test123"
+        key-password: "Test123"
+        key-store-type: jks
+        trust-store-type: jks
+      bootstrap-servers: kafka:9093
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+
