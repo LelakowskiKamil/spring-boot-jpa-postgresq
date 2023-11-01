@@ -7,8 +7,8 @@ services:
     ports:
       - 9050:9050
     volumes:
-      - ./kafka/kafkacert/client-truststore.jks:/certs/kafka.client.truststore.jks:ro
-      - ./kafka/kafkacert/client-keystore.jks:/certs/kafka.client.keystore.jks:ro
+      - ./kafka/kafka-untrusted-certs/client-truststore.jks:/certs/kafka.client.truststore.jks:ro
+      - ./kafka/kafka-untrusted-certs/client-keystore.jks:/certs/kafka.client.keystore.jks:ro
     depends_on:
       - kafka
   postgres:
@@ -50,8 +50,8 @@ services:
       - 9093:9093
       - 9092:9092
     volumes:
-      - ./kafka/kafkacert/server-keystore.jks:/certs/kafka.server.keystore.jks:ro
-      - ./kafka/kafkacert/server-truststore.jks:/certs/kafka.server.truststore.jks:ro
+      - ./kafka/kafka-untrusted-certs/server-keystore.jks:/certs/kafka.server.keystore.jks:ro
+      - ./kafka/kafka-untrusted-certs/server-truststore.jks:/certs/kafka.server.truststore.jks:ro
     depends_on:
       - zookeeper
     environment:
@@ -87,8 +87,8 @@ services:
       - KAFKA_CLUSTERS_0_PROPERTIES_SSL_PROTOCOL= TLSv1.2
       - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS= kafka:9093
     volumes:
-      - ./kafka/kafkacert/server-keystore.jks:/certs/kafka.server.keystore.jks:ro
-      - ./kafka/kafkacert/server-truststore.jks:/certs/kafka.server.truststore.jks:ro
+      - ./kafka/kafka-untrusted-certs/server-keystore.jks:/certs/kafka.server.keystore.jks:ro
+      - ./kafka/kafka-untrusted-certs/server-truststore.jks:/certs/kafka.server.truststore.jks:ro
   #  redis:
   #    image: redis:7.2.2-alpine
   #    restart: no
@@ -128,8 +128,8 @@ services:
       - 9600:9600
     volumes:
       - ./logstash.conf:/usr/share/logstash/pipeline/logstash.conf
-      - ./kafka/kafkacert/client-keystore.jks:/usr/share/logstash/client-keystore.jks
-      - ./kafka/kafkacert/client-truststore.jks:/usr/share/logstash/client-truststore.jks
+      - ./kafka/kafka-untrusted-certs/client-keystore.jks:/usr/share/logstash/client-keystore.jks
+      - ./kafka/kafka-untrusted-certs/client-truststore.jks:/usr/share/logstash/client-truststore.jks
     environment:
       - XPACK_MONITORING_ELASTICSEARCH_HOSTS=http://elasticsearch:9200 #Important
       - XPACK_MONITORING_ENABLED=true #Important

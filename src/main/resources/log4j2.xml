@@ -37,8 +37,6 @@
             <Property name="security.protocol">SSL</Property>
             <Property name="ssl.truststore.location">/certs/kafka.client.truststore.jks</Property>
             <Property name="ssl.truststore.password">Test123</Property>
-            <Property name="ssl.keystore.location">/certs/kafka.client.keystore.jks</Property>
-            <Property name="ssl.keystore.password">Test123</Property>
             <Property name="ssl.key.password">Test123</Property>
             <Property name="ssl.protocol">TLSv1.2</Property>
             <Property name="acks">1</Property>

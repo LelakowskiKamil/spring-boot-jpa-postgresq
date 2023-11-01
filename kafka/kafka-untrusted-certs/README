@@ -1,0 +1,10 @@
+server:
+keytool -genkey -alias server-keystore -keyalg RSA -keystore server-keystore.jks -storetype JKS -keypass Test123 -storepass Test123 -dname "CN=kafka" -ext SAN="DNS:kafka,IP:127.0.0.1"
+keytool -export -alias server-keystore -file localhost-server.cer -keystore server-keystore.jks -storepass Test123
+keytool -import -v -trustcacerts -alias server-keystore -file localhost-server.cer -keystore server-truststore.jks -storepass Test123
+
+client:
+keytool -genkey -alias client-keystore -keyalg RSA -keystore client-keystore.jks -storetype JKS -keypass Test123 -storepass Test123 -dname "CN=kafka" -ext SAN="DNS:kafka,IP:127.0.0.1"
+keytool -export -alias client-keystore -file localhost-client.cer -keystore client-keystore.jks -storepass Test123
+keytool -import -v -trustcacerts -alias client-keystore -file localhost-client.cer -keystore client-truststore.jks -storepass Test123
+
