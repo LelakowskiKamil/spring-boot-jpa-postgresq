@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--FIXME Important - add appender packages-->
-<Configuration status="warn"
-               packages="org.apache.logging.log4j.layout.template.json,org.springframework.amqp.rabbit.log4j2">
+<Configuration status="warn">
     <Appenders>
         <RollingFile name="RollingFileAppender" fileName="logs/springbootjpa.log"
                      filePattern="logs/springbootjpa-%d{yyyy-MM-dd}-%i.zip" ignoreExceptions="false">
@@ -18,46 +16,46 @@
         <!--            <Property name="Content-Type" value="application/json"/>-->
         <!--            <JsonTemplateLayout eventTemplateUri="classpath:logstash_log_template.json"/>-->
         <!--        </Http>-->
-        <RabbitMQ name="rabbitmq"
-                  addresses="localhost:5672"
-                  host="localhost" port="5672" user="guest" password="guest" virtualHost="/"
-                  exchange="logback" exchangeType="topic" declareExchange="true" durable="true" autoDelete="false"
-                  applicationId="spring-boot-jpa-postgresql" routingKeyPattern="SomeIntegrationEvent"
-                  senderPoolSize="3"
-                  maxSenderRetries="5"
-                  bufferSize="10">
-            <JsonTemplateLayout eventTemplateUri="classpath:logstash_log_template.json"/>
-        </RabbitMQ>
+<!--        <RabbitMQ name="rabbitmq"-->
+<!--                  addresses="localhost:5672"-->
+<!--                  host="localhost" port="5672" user="guest" password="guest" virtualHost="/"-->
+<!--                  exchange="logback" exchangeType="topic" declareExchange="true" durable="true" autoDelete="false"-->
+<!--                  applicationId="spring-boot-jpa-postgresql" routingKeyPattern="SomeIntegrationEvent"-->
+<!--                  senderPoolSize="3"-->
+<!--                  maxSenderRetries="5"-->
+<!--                  bufferSize="10">-->
+<!--            <JsonTemplateLayout eventTemplateUri="classpath:logstash_log_template.json"/>-->
+<!--        </RabbitMQ>-->
         <!--                <Socket name="socket" host="127.0.0.1" port="5000">-->
         <!--                    <JsonTemplateLayout eventTemplateUri="classpath:logstash_log_template.json"/>-->
         <!--                </Socket>-->
-        <Kafka name="Kafka" topic="test" ignoreExceptions="false">
-            <JsonTemplateLayout eventTemplateUri="classpath:logstash_log_template.json"/>
-            <Property name="bootstrap.servers">kafka:9093</Property>
-            <Property name="security.protocol">SSL</Property>
-            <Property name="ssl.truststore.location">/certs/kafka.client.truststore.jks</Property>
-            <Property name="ssl.truststore.password">Test123</Property>
-            <Property name="ssl.key.password">Test123</Property>
-            <Property name="ssl.protocol">TLSv1.2</Property>
-            <Property name="acks">1</Property>
-            <Property name="max.block.ms">12000</Property>
-            <Property name="buffer.memory">33554432</Property>
-            <Property name="compression.type">gzip</Property>
-            <Property name="request.timeout.ms">6000</Property>
-            <Property name="socket.connection.setup.timeout.ms">2000</Property>
-            <Property name="socket.connection.setup.timeout.max.ms">6000</Property>
-        </Kafka>
-        <Failover name="FailoverKafka" primary="Kafka">
-            <Failovers>
-                <AppenderRef ref="Console"/>
-            </Failovers>
-        </Failover>
+<!--        <Kafka name="Kafka" topic="test" ignoreExceptions="false" >-->
+<!--            <JsonTemplateLayout eventTemplateUri="classpath:logstash_log_template.json"/>-->
+<!--            <Property name="bootstrap.servers">kafka:9093</Property>-->
+<!--            <Property name="security.protocol">SSL</Property>-->
+<!--            <Property name="ssl.truststore.location">/certs/kafka.client.truststore.jks</Property>-->
+<!--            <Property name="ssl.truststore.password">Test123</Property>-->
+<!--            <Property name="ssl.key.password">Test123</Property>-->
+<!--            <Property name="ssl.protocol">TLSv1.2</Property>-->
+<!--            <Property name="acks">1</Property>-->
+<!--            <Property name="max.block.ms">12000</Property>-->
+<!--            <Property name="buffer.memory">33554432</Property>-->
+<!--            <Property name="compression.type">gzip</Property>-->
+<!--            <Property name="request.timeout.ms">6000</Property>-->
+<!--            <Property name="socket.connection.setup.timeout.ms">2000</Property>-->
+<!--            <Property name="socket.connection.setup.timeout.max.ms">6000</Property>-->
+<!--        </Kafka>-->
+<!--        <Failover name="FailoverKafka" primary="Kafka">-->
+<!--            <Failovers>-->
+<!--                <AppenderRef ref="Console"/>-->
+<!--            </Failovers>-->
+<!--        </Failover>-->
     </Appenders>
     <Loggers>
         <Root level="INFO">
-            <AppenderRef ref="FailoverKafka"/>
+            <AppenderRef ref="Console"/>
         </Root>
-        <logger name="com.bezkoder" level="debug"/>
+        <logger name="pl.lelakowski" level="debug"/>
         <logger name="org.apache.kafka"
                 level="ERROR"/> <!-- level wymagany - https://logging.apache.org/log4j/2.x/manual/appenders.html#KafkaAppender -->
     </Loggers>

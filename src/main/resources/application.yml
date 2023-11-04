@@ -1,0 +1,17 @@
+spring:
+  config:
+    import: classpath:/properties/postgres-localhost.yml
+  liquibase:
+    change-log: classpath:/db/changelog/db.changelog-master.xml
+    drop-first: true
+
+server:
+  port: 9050
+
+project:
+  version: '@project.version@'
+
+
+test:
+  xd: test
+

@@ -5,19 +5,19 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "tutorials")
+@Table(name = "TUTORIALS")
 @Data
 @NoArgsConstructor
 public class Tutorial {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "title")
+    @Column(name = "name")
     private String title;
 
-    @Column(name = "description")
+    @Column(name = "specification")
     private String description;
 
     @Column(name = "published")

@@ -1,8 +1,4 @@
 spring:
-  datasource:
-    url: jdbc:postgresql://postgres:5432/postgres #container name for postgres
-  rabbitmq:
-    host: rabbitmq #container name for rabbitmq
   kafka:
     properties:
       security.protocol: "SSL"
@@ -10,8 +6,6 @@ spring:
     ssl:
       trust-store-location: file:/certs/kafka.client.truststore.jks #mounted file
       trust-store-password: "Test123"
-      key-store-location: file:/certs/kafka.client.keystore.jks #keystore with CN = host, DNS: host
-      key-store-password: "Test123"
       protocol: TLSv1.2
     consumer:
       bootstrap-servers: kafka:9093
@@ -22,16 +16,12 @@ spring:
       ssl:
         trust-store-location: file:/certs/kafka.client.truststore.jks
         trust-store-password: "Test123"
-        key-store-location: file:/certs/kafka.client.keystore.jks
-        key-store-password: "Test123"
         protocol: TLSv1.2
     producer:
       bootstrap-servers: kafka:9093
       ssl:
         trust-store-location: file:/certs/kafka.client.truststore.jks
         trust-store-password: "Test123"
-        key-store-location: file:/certs/kafka.client.keystore.jks
-        key-store-password: "Test123"
         protocol: TLSv1.2
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
