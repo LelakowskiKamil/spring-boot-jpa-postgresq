@@ -1,6 +1,6 @@
 spring:
   config:
-    import: classpath:/properties/postgres-localhost.yml
+    import: classpath:/properties/postgres-docker.yml, classpath:/properties/kafka-mTLS-docker.yml
   liquibase:
     change-log: classpath:/db/changelog/db.changelog-master.xml
     drop-first: true

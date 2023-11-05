@@ -29,27 +29,27 @@
         <!--                <Socket name="socket" host="127.0.0.1" port="5000">-->
         <!--                    <JsonTemplateLayout eventTemplateUri="classpath:logstash_log_template.json"/>-->
         <!--                </Socket>-->
-<!--        <Kafka name="Kafka" topic="test" ignoreExceptions="false" >-->
-<!--            <JsonTemplateLayout eventTemplateUri="classpath:logstash_log_template.json"/>-->
-<!--            <Property name="bootstrap.servers">kafka:9093</Property>-->
-<!--            <Property name="security.protocol">SSL</Property>-->
-<!--            <Property name="ssl.truststore.location">/certs/kafka.client.truststore.jks</Property>-->
-<!--            <Property name="ssl.truststore.password">Test123</Property>-->
-<!--            <Property name="ssl.key.password">Test123</Property>-->
-<!--            <Property name="ssl.protocol">TLSv1.2</Property>-->
-<!--            <Property name="acks">1</Property>-->
-<!--            <Property name="max.block.ms">12000</Property>-->
-<!--            <Property name="buffer.memory">33554432</Property>-->
-<!--            <Property name="compression.type">gzip</Property>-->
-<!--            <Property name="request.timeout.ms">6000</Property>-->
-<!--            <Property name="socket.connection.setup.timeout.ms">2000</Property>-->
-<!--            <Property name="socket.connection.setup.timeout.max.ms">6000</Property>-->
-<!--        </Kafka>-->
-<!--        <Failover name="FailoverKafka" primary="Kafka">-->
-<!--            <Failovers>-->
-<!--                <AppenderRef ref="Console"/>-->
-<!--            </Failovers>-->
-<!--        </Failover>-->
+        <Kafka name="Kafka" topic="test" ignoreExceptions="false" >
+            <JsonTemplateLayout eventTemplateUri="classpath:logstash_log_template.json"/>
+            <Property name="bootstrap.servers">kafka:9093</Property>
+            <Property name="security.protocol">SSL</Property>
+            <Property name="ssl.truststore.location">/certs/kafka.client.truststore.jks</Property>
+            <Property name="ssl.truststore.password">Test123</Property>
+            <Property name="ssl.key.password">Test123</Property>
+            <Property name="ssl.protocol">TLSv1.2</Property>
+            <Property name="acks">1</Property>
+            <Property name="max.block.ms">12000</Property>
+            <Property name="buffer.memory">33554432</Property>
+            <Property name="compression.type">gzip</Property>
+            <Property name="request.timeout.ms">6000</Property>
+            <Property name="socket.connection.setup.timeout.ms">2000</Property>
+            <Property name="socket.connection.setup.timeout.max.ms">6000</Property>
+        </Kafka>
+        <Failover name="FailoverKafka" primary="Kafka">
+            <Failovers>
+                <AppenderRef ref="Console"/>
+            </Failovers>
+        </Failover>
     </Appenders>
     <Loggers>
         <Root level="INFO">

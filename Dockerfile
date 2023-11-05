@@ -1,5 +1,5 @@
 # Use an official Maven image as the build environment
-FROM maven:3.8.3-openjdk-17 as builder
+FROM maven:3.9.5-amazoncorretto-21 as builder
 
 # Set the working directory in the container to /app
 WORKDIR /app
@@ -11,7 +11,7 @@ COPY . .
 RUN mvn clean package -DskipTests
 
 # Create a runtime environment using AdoptOpenJDK
-FROM openjdk:17.0-slim
+FROM openjdk:21-slim
 
 # Set the working directory to /app
 WORKDIR /app
